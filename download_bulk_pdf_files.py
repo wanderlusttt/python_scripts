@@ -1,5 +1,7 @@
 import os
 import requests
+import openpyxl
+import pandas as pd
 from bs4 import BeautifulSoup
 
 # Set the URL of the website you want to scrape
@@ -7,6 +9,21 @@ url = 'https://www.icai.org/post.html?post_id=17822'
 
 # Send an HTTP GET request to the website and retrieve the response
 response = requests.get(url)
+
+# Parse the HTML content of the response
+
+soup = BeautifulSoup(response.text, 'html.parser')
+# Find all the links on the page that link to a file
+file_links = soup.find_all('a', href=True)
+
+# Open the output file in write mode
+with open('links.txt', 'w') as f:
+  # Write the output to the file
+  for link in file_links:
+    f.write(link.text + ' | '+ link['href'])
+    f.write('\n')
+
+print('Output saved to links.txt file')
 
 # Parse the HTML content of the response
 soup = BeautifulSoup(response.text, 'html.parser')
